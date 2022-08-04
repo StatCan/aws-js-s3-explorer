@@ -3,6 +3,8 @@
 This fork of the original [aws-js-s3-explorer](https://github.com/awslabs/aws-js-s3-explorer) tool exists because several AAW-specific modifications are made to comply with the requirements of the platform. The modifications and their rationale are stated below.
 
 1. All third party css/javascript/fonts/webfonts are placed in a `vendor` folder of this repository. The reason for this change is that users need to be able to access the s3proxy user interface in a protected-b environment without internet access. Therefore, the static file server hosting this application must provide all vendor static files in addition to those for this application.
+2. A `Dockerfile` is added so that the static files for this application can be added to an image based off of [s3proxy](https://github.com/gaul/s3proxy). The pod that deploys s3proxy has an NGINX container that serves the static files for the aws-js-explorer application, and an s3proxy container that provides an S3 API for users that is backed by filesystem storage. There is also a section of the Dockerfile that grants a non-root user read/write/execute permissions over the user's home directory. This is required so that the process running s3proxy has sufficient filesystem permissions to perform all necessary s3 operations.
+
 # AWS JavaScript S3 Explorer (v2 alpha)
 
 Note: if you are looking for the original, view-only version of this tool then please visit the [S3 Explorer](https://github.com/awslabs/aws-js-s3-explorer) page.
