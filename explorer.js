@@ -205,7 +205,7 @@ function path2short(path, escape = false) {
 // Virtual-hosted-style URL, ex: https://mybucket1.s3.amazonaws.com/index.html
 function object2hrefvirt(bucket, key, escape = false) {
     const enckey = key.split('/').map(x => encodeURIComponent(x)).join('/');
-    const rc = `${document.location.protocol}//${bucket}.s3.amazonaws.com/${enckey}`;
+    const rc = `${document.location.protocol}//${document.location.host}/${bucket}/${enckey}`;
     return escape ? htmlEscape(rc) : rc;
 }
 
@@ -213,7 +213,7 @@ function object2hrefvirt(bucket, key, escape = false) {
 // eslint-disable-next-line no-unused-vars
 function object2hrefpath(bucket, key, escape = false) {
     const enckey = key.split('/').map(x => encodeURIComponent(x)).join('/');
-    const rc = `${document.location.protocol}//s3.amazonaws.com/${bucket}/${enckey}`;
+    const rc = `${document.location.protocol}//${document.location.host}/${bucket}/${enckey}`;
     return escape ? htmlEscape(rc) : rc;
 }
 
@@ -254,8 +254,11 @@ function SharedService($rootScope) {
         $.fn.dataTableExt.afnFiltering.length = 0;
 
         // AWS.config.update(settings.cred);
-        // AWS.config.update({ region: settings.region });
-        AWS.config.update(Object.assign(settings.cred, { region: settings.region }));
+        AWS.config.update({ region: "" });
+        AWS.config.update(Object.assign(settings.cred, { 
+            region: settings.region,
+            ep: document.location.hostname
+        }));
 
         if (this.skew) {
             this.correctClockSkew(settings.bucket);
@@ -401,7 +404,7 @@ function ViewController($scope, SharedService) {
         } else {
             // Authenticated user has clicked on an object so create pre-signed
             // URL and download it in new window/tab
-            const s3 = new AWS.S3();
+            const s3 = new AWS.S3({endpoint: `${document.location.protocol}//${document.location.hostname}`});
             const params = {
                 Bucket: $scope.view.settings.bucket, Key: target.dataset.s3key, Expires: 15,
             };
@@ -1032,7 +1035,7 @@ function SettingsController($scope, SharedService) {
     // Initialized for an unauthenticated user exploring the current bucket
     // TODO: calculate current bucket and initialize below
     $scope.settings = {
-        auth: 'anon', region: '', bucket: '', entered_bucket: '', selected_bucket: '', view: 'folder', delimiter: '/', prefix: '',
+        auth: 'auth', region: '', bucket: '', entered_bucket: '', selected_bucket: '', view: 'folder', delimiter: '/', prefix: '',
     };
     $scope.settings.mfa = { use: 'no', code: '' };
     $scope.settings.cred = { accessKeyId: '', secretAccessKey: '', sessionToken: '' };
