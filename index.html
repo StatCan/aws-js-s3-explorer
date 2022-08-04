@@ -51,7 +51,7 @@ permissions and limitations under the License.
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <p><b>Bucket</b>: Please indicate which region and S3 bucket you want to explore.</p>
-                                        <div class="input-group bottom-marg-10">
+                                        <div class="input-group bottom-marg-10" style="display: none;">
                                             <span class="input-group-addon">Region</span>
                                             <select name="region" class="form-control" ng-model="settings.region">
                                                 <option value="ap-south-1">Asia Pacific (Mumbai)</option>
@@ -83,11 +83,15 @@ permissions and limitations under the License.
                                             </select>
                                         </div>
                                         -->
-                                            <span class="input-group-addon">Bucket</span>
-                                            <input name="bucket" ng-model="settings.entered_bucket" type="text" class="form-control" placeholder="bucket" ng-required="!buckets.length"/>
-                                        </div>
-                                        <p><b>Authentication</b>: Please provide any credentials needed to access the bucket.</p>
                                         <div class="input-group bottom-marg-10">
+                                            <span class="input-group-addon">Bucket</span>
+                                            <select name="bucketlist" class="form-control" ng-model="settings.entered_bucket" placeholder="bucket" ng-required="buckets.length">
+                                                <option value="standard">Standard</option>
+                                                <option value="premium">Premium</option>
+                                            </select>
+                                        </div>
+                                        <!-- <p><b>Authentication</b>: Please provide any credentials needed to access the bucket.</p> -->
+                                        <div class="input-group bottom-marg-10" style="display: none;">
                                             <span class="input-group-addon">Authentication</span>
                                             <select name="county" class="form-control" ng-model="settings.auth" required>
                                                 <option value="anon">Public Bucket (no authentication needed)</option>
@@ -96,13 +100,13 @@ permissions and limitations under the License.
                                             </select>
                                         </div>
                                         <!-- <p ng-hide="settings.auth=='anon'"><b>Credentials</b>: this web page uses the <a href="http://aws.amazon.com/sdk-for-browser/" target="_blank">AWS SDK for JavaScript in the Browser</a>. Your AWS credentials are kept in memory and used by the SDK for authentication. Your secret access key is used to sign API requests but it is <b>not</b> sent to the S3 service.</p> -->
-                                        <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'">
+                                        <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'" style="display: none;">
                                             <span class="input-group-addon">Access Key ID</span>
-                                            <input name="accesskey" type="text" ng-model="settings.cred.accessKeyId" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="access key id" required/>
+                                            <input name="accesskey" type="text" ng-model="settings.cred.accessKeyId" ng-init="settings.cred.accessKeyId='fakeCredential'" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="access key id" required/>
                                         </div>
-                                        <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'">
+                                        <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'" style="display: none;">
                                             <span class="input-group-addon">Secret Access Key</span>
-                                            <input name="secretkey" type="password" ng-model="settings.cred.secretAccessKey" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="secret access key" required/>
+                                            <input name="secretkey" type="password" ng-model="settings.cred.secretAccessKey" ng-init="settings.cred.secretAccessKey='fakeCredential'" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="secret access key" required/>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-show="settings.auth=='temp'">
                                             <span class="input-group-addon">Session Token</span>
