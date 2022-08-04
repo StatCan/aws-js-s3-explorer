@@ -9,7 +9,7 @@ This fork of the original [aws-js-s3-explorer](https://github.com/awslabs/aws-js
 5. As mentioned in point (3), the aws javascript sdk appears to require that users pass an access key/secret key, even if the S3 backend does not require authentication (which is the case in the AAW use case as each user has their own private s3proxy instance). Therefore, fake credentials are implicitly passed to the aws client so that the client can make authenticated calls against the user's private s3proxy back-end, which ignores these fake credentials.
 6. Basic internationalization (i18n) has been added to this page so that users can choose between french or english text on the aws js explorer web application. Elements containing `data-i18n` will be selected for translation and the text given in the `base-value` attribute will be used to look up keys in the `englishConfig` and `frenchConfig` maps. **Note**: a future refactor can simplify this to only use 1 attribute (e.g. `data-i18n=<key-in-map>`).
 7. A number of URLs are changed in the `explorer.js` code since requests are sent to users' private s3proxy instances rather than an AWS bucket.
-8. 
+8. Components of `explorer.js` addressing S3 bucket policies and CORS were removed as these components do not apply because each user has their own private s3proxy back-end.
 
 # AWS JavaScript S3 Explorer (v2 alpha)
 
