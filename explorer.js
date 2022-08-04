@@ -978,48 +978,12 @@ function InfoController($scope) {
 
     $scope.getBucketPolicy = (Bucket) => {
         const params = { Bucket };
-        $scope.info.policy = null;
-        DEBUG.log('call getBucketPolicy:', Bucket);
-
-        new AWS.S3(AWS.config).getBucketPolicy(params, (err, data) => {
-            let text;
-            if (err && err.code === 'NoSuchBucketPolicy') {
-                DEBUG.log(err);
-                text = 'No bucket policy.';
-            } else if (err) {
-                DEBUG.log(err);
-                text = JSON.stringify(err);
-            } else {
-                DEBUG.log(data.Policy);
-                $scope.info.policy = data.Policy;
-                DEBUG.log('Info:', $scope.info);
-                text = JSON.stringify(JSON.parse(data.Policy.trim()), null, 2);
-            }
-            $('#info-policy').text(text);
-        });
+        $scope.info.policy = 'No bucket policy';
     };
 
     $scope.getBucketCors = (Bucket) => {
         const params = { Bucket };
-        $scope.info.cors = null;
-        DEBUG.log('call getBucketCors:', Bucket);
-
-        new AWS.S3(AWS.config).getBucketCors(params, (err, data) => {
-            let text;
-            if (err && err.code === 'NoSuchCORSConfiguration') {
-                DEBUG.log(err);
-                text = 'This bucket has no CORS configuration.';
-            } else if (err) {
-                DEBUG.log(err);
-                text = JSON.stringify(err);
-            } else {
-                DEBUG.log(data.CORSRules);
-                [$scope.info.cors] = data.CORSRules;
-                DEBUG.log('Info:', $scope.info);
-                text = JSON.stringify(data.CORSRules, null, 2);
-            }
-            $('#info-cors').text(text);
-        });
+        $scope.info.cors = 'This bucket has no CORS configuration.';
     };
 }
 
@@ -1577,6 +1541,9 @@ $(document).ready(() => {
     // Default AWS region and v4 signature
     AWS.config.update({ region: '' });
     AWS.config.update({ signatureVersion: 'v4' });
+    AWS.config.update({ endpoint: `${document.location.protocol}//${document.location.host}`});
+    AWS.config.update({ s3ForcePathStyle: true });
+
 
     // Show navbuttons
     $('#navbuttons').removeClass('hidden');
