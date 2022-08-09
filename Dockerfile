@@ -4,14 +4,17 @@ FROM docker.io/andrewgaul/s3proxy:sha-71541ac
 # Copy vendor static files to image - need to mount these to nginx container through
 # shared volume. This is required so that static files are available in a protected-b
 # environment where network access is restricted.
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/index.html /etc/static/aaw-fc/index.html
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/explorer.css /etc/static/aaw-fc/explorer.css
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/explorer.js /etc/static/aaw-fc/explorer.js
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/sw_modify_headers.js /etc/static/aaw-fc/sw_modify_headers.js
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/vendor/fonts/ /etc/static/fonts/
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/vendor/webfonts/ /etc/static/vendor/webfonts/
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/vendor/js/ /etc/static/vendor/js/
-COPY manifests/s3proxy/fancy/aws-js-s3-explorer/vendor/css/ /etc/static/vendor/css/
+COPY vendor/webfonts/ /etc/static/vendor/webfonts/
+COPY vendor/fonts/ /etc/static/vendor/fonts/
+COPY vendor/js/ /etc/static/vendor/js/
+COPY vendor/css/ /etc/static/vendor/css/
+
+
+COPY index.html /etc/static/aaw-fc/index.html
+COPY explorer.css /etc/static/aaw-fc/explorer.css
+COPY explorer.js /etc/static/aaw-fc/explorer.js
+COPY sw_modify_headers.js /etc/static/aaw-fc/sw_modify_headers.js
+
 
 # Create non-root user
 ARG USER=jovyan
