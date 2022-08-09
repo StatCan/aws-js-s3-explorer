@@ -13,7 +13,7 @@ COPY vendor/css/ /etc/static/vendor/css/
 COPY index.html /etc/static/aaw-fc/index.html
 COPY explorer.css /etc/static/aaw-fc/explorer.css
 COPY explorer.js /etc/static/aaw-fc/explorer.js
-COPY sw_modify_headers.js /etc/static/aaw-fc/sw_modify_headers.js
+COPY sw_modify_header.js /etc/static/aaw-fc/sw_modify_header.js
 
 
 # Create non-root user
