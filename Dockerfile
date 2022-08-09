@@ -1,5 +1,5 @@
 # S3Proxy Dockerfile as base image
-FROM docker.io/andrewgaul/s3proxy:sha-71541ac
+FROM docker.io/andrewgaul/s3proxy:sha-ba0fd6d
 
 # Copy vendor static files to image - need to mount these to nginx container through
 # shared volume. This is required so that static files are available in a protected-b

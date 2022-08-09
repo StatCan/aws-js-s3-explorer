@@ -35,7 +35,7 @@ jobs:
     # Container build and push to a Azure Container registry (ACR)
     - run: |
         docker build -f Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/s3proxy:${{ github.sha }} .
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/s3proxy:${{ github.sha }}
+    # docker push ${{ env.REGISTRY_NAME }}.azurecr.io/s3proxy:${{ github.sha }}
     # Scan image for vulnerabilities
     - uses: Azure/container-scan@v0
       with:
