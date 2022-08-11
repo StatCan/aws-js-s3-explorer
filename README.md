@@ -11,6 +11,10 @@ This fork of the original [aws-js-s3-explorer](https://github.com/awslabs/aws-js
 7. A number of URLs are changed in the `explorer.js` code since requests are sent to users' private s3proxy instances rather than an AWS bucket.
 8. Components of `explorer.js` addressing S3 bucket policies and CORS were removed as these components do not apply because each user has their own private s3proxy back-end.
 
+**Notes for local testing**:
+
+- **apply/delete manifests**: `kustomize build k8s | kubectl apply -f ` to apply directly or `kustomize build k8s | tee manifest.yaml | kubectl apply -f ` to get a snapshot of the compiled manifest.
+
 # AWS JavaScript S3 Explorer (v2 alpha)
 
 Note: if you are looking for the original, view-only version of this tool then please visit the [S3 Explorer](https://github.com/awslabs/aws-js-s3-explorer) page.
