@@ -21,7 +21,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: s3proxy
-          image: docker.io/andrewgaul/s3proxy:sha-71541ac
+          image: k8scc01covidacr.azurecr.io/s3proxy:a73c4de9a715e6d5760616465bbaf9256995bb3e
           resources:
             limits:
               cpu: "0.5"
@@ -55,7 +55,7 @@ spec:
               containerPort: 8080
       initContainers:
         - name: copy-vendor-static-files
-          image: k3d-s3proxy-registry:5050/s3proxy-dev:latest
+          image: k8scc01covidacr.azurecr.io/s3proxy:a73c4de9a715e6d5760616465bbaf9256995bb3e
           command: [bash, -c]
           args: ["cp -r /etc/static/* /etc/nginx/html/s3/"]
           imagePullPolicy: Always
