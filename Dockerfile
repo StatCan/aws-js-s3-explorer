@@ -29,7 +29,7 @@ RUN mkdir -p $APP_HOME  && mkdir /home/jovyan/buckets/standard && mkdir /home/jo
 
 RUN adduser --system --group $USER \
     && mkdir -p $APP_HOME \
-    && chmod -R 777 $APP_HOME \
+    && chmod -R 755 $APP_HOME \
     && chown -R $USER:$USER $APP_HOME
 
 # Start container as non-root user
