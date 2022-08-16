@@ -23,17 +23,44 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
     if (e.request.url.includes("/standard") || e.request.url.includes("/premium")) {
         console.log("Service Worker: s3proxy API call, modify request headers.")
-        // Define new request without the Authorization header
-        var req = new Request(e.request.url, {
-            method: e.request.method,
-            headers: {
-                ...e.request.headers
-            },
-            mode: e.request.mode,
-            credentials: e.request.credentials,
-            redirect: e.request.redirect
-        });
-        e.respondWith(fetch(req))
+        const headers = new Headers(e.request.headers);
+        // remove erroneous authorization header
+        headers.delete("authorization");
+        if (e.request.headers.get("content-type").includes("image/") || e.request.headers.get("content-type").includes('application/octet-stream')) {
+            const promiseChain = e.request.arrayBuffer().then((originalBody) => {
+                return fetch(e.request.url, {
+                        method: e.request.method,
+                        headers,
+                        body: originalBody,
+                    });
+            });
+            e.respondWith(promiseChain);
+            return;
+        }
+        else if (e.request.headers.get("content-type").includes("text/") || e.request.headers.get("content-type").includes('application/octet-stream')) {
+            const promiseChain = e.request.text().then((originalBody) => {
+                return fetch(e.request.url, {
+                    method: e.request.method,
+                    headers,
+                    body: originalBody,
+                });
+            });
+            e.respondWith(promiseChain);
+            return;
+        }
+        else {
+            // Define new request without the Authorization header
+            var req = new Request(e.request.url, {
+                method: e.request.method,
+                headers: {
+                    ...e.request.headers
+                },
+                mode: e.request.mode,
+                credentials: e.request.credentials,
+                redirect: e.request.redirect
+            });
+            e.respondWith(fetch(req))
+        }
     }
     else {
         console.log("Service Worker: non-s3proxy call, do not modify request headers.")
