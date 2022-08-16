@@ -6,6 +6,6 @@ resources:
   - s3proxy-service.yaml
   - s3proxy-cm.yaml
   - s3proxy-nginx-cm.yaml
-  - s3proxy-virtualservice.yaml
-  - s3proxy-np.yaml
+  # - s3proxy-virtualservice.yaml
+  # - s3proxy-np.yaml
   # - mc-cli.yaml  # debug pod with minio client

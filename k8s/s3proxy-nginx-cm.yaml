@@ -17,21 +17,21 @@ data:
           listen       8080;
           server_name  _;
 
-          location ~ ^/s3/fonts/.*$ {
+          location ~ ^/fonts/.*$ {
               root html;
           }
 
-          location ~ ^/s3/webfonts/.*$ {
+          location ~ ^/webfonts/.*$ {
               root html;
           }
 
-          location ~ ^/s3/aaw-fc/.*$ {
+          location / {
               include  /etc/nginx/mime.types;
               root   html;
               index  index.html index.htm;
           }
 
-          location / {
+          location ~ ^/standard.*$ {
              proxy_set_header X-Real-IP $remote_addr;
              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
              proxy_set_header X-Forwarded-Proto $scheme;
