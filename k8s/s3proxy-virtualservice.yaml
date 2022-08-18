@@ -49,6 +49,10 @@ spec:
     # Note: In Istio having multiple list items under match has OR semantics and having
     # multiple items in a single list item has AND semantics. This was pointed out in the
     # following GH issue: https://github.com/istio/istio/issues/16959
+
+    # When user opens an s3 object link from inside an iframe in the Kubeflow interface,
+    # the referrer url is /index.html, not /sw_modify_header.js, so need to route requests
+    # from both referers to the s3proxy service in the user's namespace.
     - uri:
         prefix: /standard
       headers:
@@ -59,6 +63,16 @@ spec:
       headers:
         referer:
           exact: https://kubeflow.aaw.cloud.statcan.ca/s3/aaw-fc/sw_modify_header.js
+    - uri:
+        prefix: /standard
+      headers:
+        referer:
+          exact: https://kubeflow.aaw-dev.cloud.statcan.ca/s3/aaw-fc/index.html
+    - uri:
+        prefix: /standard
+      headers:
+        referer:
+          exact: https://kubeflow.aaw.cloud.statcan.ca/s3/aaw-fc/index.html
     name: s3-standard-bucket
     route:
     - destination:
@@ -76,6 +90,16 @@ spec:
       headers:
         referer:
           exact: https://kubeflow.aaw.cloud.statcan.ca/s3/aaw-fc/sw_modify_header.js
+    - uri:
+        prefix: /premium
+      headers:
+        referer:
+          exact: https://kubeflow.aaw-dev.cloud.statcan.ca/s3/aaw-fc/index.html
+    - uri:
+        prefix: /premium
+      headers:
+        referer:
+          exact: https://kubeflow.aaw.cloud.statcan.ca/s3/aaw-fc/index.html
     name: s3-premium-bucket
     route:
     - destination:
