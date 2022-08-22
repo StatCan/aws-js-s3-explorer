@@ -4,16 +4,16 @@ FROM docker.io/andrewgaul/s3proxy:sha-ba0fd6d
 # Copy vendor static files to image - need to mount these to nginx container through
 # shared volume. This is required so that static files are available in a protected-b
 # environment where network access is restricted.
-COPY vendor/webfonts/ /etc/static/aaw-fc/vendor/webfonts/
-COPY vendor/fonts/ /etc/static/aaw-fc/vendor/fonts/
-COPY vendor/js/ /etc/static/aaw-fc/vendor/js/
-COPY vendor/css/ /etc/static/aaw-fc/vendor/css/
+COPY vendor/webfonts/ /etc/static/vendor/webfonts/
+COPY vendor/fonts/ /etc/static/vendor/fonts/
+COPY vendor/js/ /etc/static/vendor/js/
+COPY vendor/css/ /etc/static/vendor/css/
 
 
-COPY index.html /etc/static/aaw-fc/index.html
-COPY explorer.css /etc/static/aaw-fc/explorer.css
-COPY explorer.js /etc/static/aaw-fc/explorer.js
-COPY sw_modify_header.js /etc/static/aaw-fc/sw_modify_header.js
+COPY index.html /etc/static/index.html
+COPY explorer.css /etc/static/explorer.css
+COPY explorer.js /etc/static/explorer.js
+COPY sw_modify_header.js /etc/static/sw_modify_header.js
 
 
 # Create non-root user
@@ -25,7 +25,7 @@ ARG APP_HOME=/home/jovyan/buckets
 # of jovyan to allow read/write/execute, and change the owner of $APP_HOME to jovyan.
 # this will let jovyan (non-root user) perform necessary s3proxy operations at the
 # mount point /home/jovyan/buckets.
-RUN mkdir -p $APP_HOME  && mkdir /home/jovyan/buckets/standard && mkdir /home/jovyan/buckets/premium
+RUN mkdir -p $APP_HOME  && mkdir /home/jovyan/buckets/unclassified && mkdir /home/jovyan/buckets/unclassified-ro && mkdir /home/jovyan/buckets/protected-b
 
 RUN adduser --system --group $USER \
     && mkdir -p $APP_HOME \

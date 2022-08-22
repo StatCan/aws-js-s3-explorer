@@ -19,9 +19,9 @@
 /* eslint no-plusplus: "off" */
 /* eslint-env es6 */
 
-//   __                     _     
-//  / _|_ __ ___ _ __   ___| |__  
-// | |_| '__/ _ \ '_ \ / __| '_ \ 
+//   __                     _
+//  / _|_ __ ___ _ __   ___| |__
+// | |_| '__/ _ \ '_ \ / __| '_ \
 // |  _| | |  __/ | | | (__| | | |
 // |_| |_|  \___|_| |_|\___|_| |_|
 
@@ -39,6 +39,7 @@ frenchConfig = {
     addFolder: "ajouter un dossier",
     confirmDelete: "Veuillez confirmer que vous voulez supprimer les objets suivants de S3.",
     bucket: "<b>Bucket</b>: Veuillez indiquer la région et le S3 bucket que vous souhaitez explorer.",
+    probdisclaimer: "<b>Note</b>: Le bucket protégé B est accessible seulement à partir d'un notebook protégé B.",
     options: "<b>Options</b>: AAW Storage Explorer peut afficher le contenu de votre S3 bucket dossier par dossier ou afficher une vue plate de l'ensemble du bucket. En outre, si vous voulez commencer dans un dossier qui n'est pas le dossier racine, entrez le préfixe initial ci-dessous, par exemple <i>song</i>.",
     object: "Objet",
     folder: "Dossier",
@@ -55,15 +56,18 @@ frenchConfig = {
     filename: "Nom de Fichier",
     progress: "Progrès",
     uploadDestination: "Les fichiers sélectionnés seront téléchargés vers: ",
-    select: "Sélectionnez"
+    select: "Sélectionnez",
+    unclassified: "Non classifié",
+    unclassifiedro: "Non classifié (lecture seule)",
+    protectedb: "Protégé B",
 }
 
-//                   _ _     _     
-//   ___ _ __   __ _| (_)___| |__  
-//  / _ \ '_ \ / _` | | / __| '_ \ 
+//                   _ _     _
+//   ___ _ __   __ _| (_)___| |__
+//  / _ \ '_ \ / _` | | / __| '_ \
 // |  __/ | | | (_| | | \__ \ | | |
 //  \___|_| |_|\__, |_|_|___/_| |_|
-//             |___/               
+//             |___/
 englishConfig = {
     pageTitle: "AAW Storage Explorer",
     settings: "AAW Storage Explorer: Settings",
@@ -78,6 +82,7 @@ englishConfig = {
     addFolder: "Add folder",
     confirmDelete: "Please confirm that you want to delete the following objects from S3.",
     bucket: "<b>Bucket</b>: Please indicate which region and S3 bucket you want to explore.",
+    probdisclaimer: "<b>Note</b>: Protected B bucket can only be accessed from a Protected B notebook.",
     options: "<b>Options</b>: AAW Storage Explorer can show your S3 bucket contents folder-by-folder or it can show a flat view of the entire bucket. Also, if you want to start in a folder that is not the root folder then enter the initial prefix below, for example <i>songs/</i>.",
     object: "object",
     folder: "folder",
@@ -94,7 +99,10 @@ englishConfig = {
     filename: "Filename",
     progress: "Progress",
     uploadDestination: "The selected files will be uploaded to:",
-    select: "Select"
+    select: "Select",
+    unclassified: "Unclassified",
+    unclassifiedro: "Unclassified (Read Only)",
+    protectedb: "Protected B",
 }
 
 /**
@@ -255,7 +263,7 @@ function SharedService($rootScope) {
 
         // AWS.config.update(settings.cred);
         AWS.config.update({ region: "" });
-        AWS.config.update(Object.assign(settings.cred, { 
+        AWS.config.update(Object.assign(settings.cred, {
             region: settings.region,
             ep: document.location.hostname
         }));

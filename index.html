@@ -50,6 +50,7 @@ permissions and limitations under the License.
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <p data-i18n base-value="bucket"><b>Bucket</b>: Please indicate which region and S3 bucket you want to explore.</p>
+                                        <p data-i18n base-value="probdisclaimer" style="color: red"><b>Note</b>: Protected B bucket can only be accessed from a Protected B notebook.</p>
                                         <div class="input-group bottom-marg-10" style="display: none;">
                                             <span class="input-group-addon">Region</span>
                                             <select name="region" class="form-control" ng-model="settings.region">
@@ -72,21 +73,12 @@ permissions and limitations under the License.
                                                 <option value="us-west-2">US West (Oregon)</option>
                                             </select>
                                         </div>
-                                        <!--
-                                        <div class="input-group bottom-marg-10" ng-show="settings.buckets.length">
-                                            <span class="input-group-addon">Bucket</span>
-                                            <select name="bucketlist" class="form-control" ng-model="settings.selected_bucket" placeholder="bucket" ng-required="buckets.length">
-                                                <option ng-repeat="bucket in settings.buckets" value="{{bucket}}">{{bucket}}</option>
-                                                <option value="standard">Standard</option>
-                                                <option value="premium">Premium</option>
-                                            </select>
-                                        </div>
-                                        -->
                                         <div class="input-group bottom-marg-10">
                                             <span class="input-group-addon">Bucket</span>
                                             <select name="bucketlist" class="form-control" ng-model="settings.entered_bucket" placeholder="bucket" ng-required="buckets.length">
-                                                <option value="standard">Standard</option>
-                                                <option value="premium">Premium</option>
+                                                <option data-i18n base-value="unclassified" value="unclassified">Unclassified</option>
+                                                <option data-i18n base-value="unclassifiedro" value="unclassified-ro">Unclassified (Read Only)</option>
+                                                <option data-i18n base-value="protectedb" value="protected-b">Protected B<option>
                                             </select>
                                         </div>
                                         <!-- <p><b>Authentication</b>: Please provide any credentials needed to access the bucket.</p> -->
