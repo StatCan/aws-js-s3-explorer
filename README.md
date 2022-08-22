@@ -13,7 +13,7 @@ This fork of the original [aws-js-s3-explorer](https://github.com/awslabs/aws-js
 
 **Notes for local testing**:
 
-- **apply/delete manifests**: `kustomize build k8s | kubectl apply -f ` to apply directly or `kustomize build k8s | tee manifest.yaml | kubectl apply -f ` to get a snapshot of the compiled manifest.
+- **apply/delete manifests**: `` to apply directly or `kustomize build k8s | tee manifest.yaml | kubectl apply -f -` to get a snapshot of the compiled manifest.
 
 # AWS JavaScript S3 Explorer (v2 alpha)
 
