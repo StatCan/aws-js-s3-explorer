@@ -1,0 +1,88 @@
+version: "3"
+dotenv: [".env"]
+output: prefixed
+silent: true
+
+vars:
+  CLUSTER_NAME: s3proxy-example
+  CONTEXT_NAME: "k3d-{{.CLUSTER_NAME}}"
+  AGENT_NODE_NAME: k3d-{{.CLUSTER_NAME}}-agent
+  SERVER_NODE_NAME: k3d-{{.CLUSTER_NAME}}-server
+  ISTIO_VERSION: "1.7.8" # Match istio control plane version
+  ISTIOCTL: "istioctl --context={{.CONTEXT_NAME}}"
+  KUBECTL: "kubectl --context={{.CONTEXT_NAME}}"
+
+tasks:
+  #  _    _____     _
+  # | | _|___ /  __| |
+  # | |/ / |_ \ / _` |
+  # |   < ___) | (_| |
+  # |_|\_\____/ \__,_|
+
+  k3d:cluster:all:
+    prefix: ⚙️ > create
+    desc: Setup local k3d cluster and install all dependencies.
+    deps:
+      - k3d:cluster:create
+      - istio:install
+
+  k3d:cluster:create:
+    prefix: ⚙️ > create k3d cluster
+    desc: create k3d cluster
+    cmds:
+      - |
+        CLUSTER_ALREADY_EXISTS=$(k3d cluster list | grep {{.CLUSTER_NAME}})
+        if [ -z "$CLUSTER_ALREADY_EXISTS" ]; then
+          # cluster doesn't exist yet, so create it and install all CRDs
+          k3d cluster create --config=k3d/config.yaml
+          kubectl create ns aaw-fc
+        else
+          echo Cluster {{.CLUSTER_NAME}} already exists.
+        fi
+  k3d:cluster:destroy:
+    prefix: ⚙️ > destroy
+    desc: destroy k3d cluster
+    cmds:
+      - "k3d cluster delete {{.CLUSTER_NAME}}"
+
+  k3d:start:
+    prefix: ⚙️ > start
+    desc: starts k3d cluster
+    cmds:
+      - "k3d cluster start {{.CLUSTER_NAME}}"
+
+  k3d:stop:
+    prefix: ⚙️ > stop
+    desc: stops k3d cluster
+    cmds:
+      - "k3d cluster stop {{.CLUSTER_NAME}}"
+
+  #  _     _   _
+  # (_)___| |_(_) ___
+  # | / __| __| |/ _ \
+  # | \__ \ |_| | (_) |
+  # |_|___/\__|_|\___/
+
+  istioctl:install:
+    prefix: istioctl > install
+    desc: Downloads Istioctl onto the user's machine in $HOME/bin.
+    cmds:
+      - ISTIO_ALREADY_INSTALLED=$(command -v istioctl) && if [[ $ISTIO_ALREADY_INSTALLED ]]; then echo istioctl is already installed; else curl -L https://istio.io/downloadIstio | ISTIO_VERSION={{.ISTIO_VERSION}} TARGET_ARCH=x86_64 sh - && mv istio-{{.ISTIO_VERSION}}/bin/istioctl $HOME/bin && rm -r istio-{{.ISTIO_VERSION}}; fi
+
+  istio:install:
+    prefix: ⚙️ > istioctl install
+    desc: install istio into k3d cluster
+    cmds:
+      - "istioctl:install"
+      - "istioctl install -y"
+  #  _          _               _   _
+  # | | ___   _| |__   ___  ___| |_| |
+  # | |/ / | | | '_ \ / _ \/ __| __| |
+  # |   <| |_| | |_) |  __/ (__| |_| |
+  # |_|\_\\__,_|_.__/ \___|\___|\__|_|
+
+  kubectl:apply:
+    prefix: ⚙️ > kubectl apply
+    desc: apply kubernetes manifests
+    cmds:
+      - "kustomize build k8s/ | kubectl apply -f -"

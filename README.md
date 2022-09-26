@@ -15,6 +15,14 @@ This fork of the original [aws-js-s3-explorer](https://github.com/awslabs/aws-js
 
 - **apply/delete manifests**: `` to apply directly or `kustomize build k8s | tee manifest.yaml | kubectl apply -f -` to get a snapshot of the compiled manifest.
 
+
+# Local Development Environment Setup
+
+1. Run `task k3d:cluster:create` at project root
+2. Run `task istio:install` at project root
+3. Run `task kubectl:apply` at project root
+
+
 # AWS JavaScript S3 Explorer (v2 alpha)
 
 Note: if you are looking for the original, view-only version of this tool then please visit the [S3 Explorer](https://github.com/awslabs/aws-js-s3-explorer) page.
