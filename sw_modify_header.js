@@ -27,7 +27,7 @@ self.addEventListener('fetch', (e) => {
 
     // If the request is not an AJAX call to one of the s3proxy buckets, do not
     // modify the request.
-    if (!(e.request.url.includes('/unclassified')) && !(e.request.url.includes('/unclassified-ro')) && !(e.request.url.includes('/protected-b'))) {
+    if (!(e.request.url.includes('/aaw-unclassified')) && !(e.request.url.includes('/aaw-unclassified-ro')) && !(e.request.url.includes('/aaw-protected-b'))) {
         e.respondWith(fetch(e.request));
     }
     // If the request is not a POST or a PUT request, forward the request with the

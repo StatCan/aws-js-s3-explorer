@@ -25,7 +25,7 @@ ARG APP_HOME=/home/jovyan/buckets
 # of jovyan to allow read/write/execute, and change the owner of $APP_HOME to jovyan.
 # this will let jovyan (non-root user) perform necessary s3proxy operations at the
 # mount point /home/jovyan/buckets.
-RUN mkdir -p $APP_HOME  && mkdir /home/jovyan/buckets/unclassified && mkdir /home/jovyan/buckets/unclassified-ro && mkdir /home/jovyan/buckets/protected-b
+RUN mkdir -p $APP_HOME
 
 RUN adduser --system --group $USER \
     && mkdir -p $APP_HOME \
