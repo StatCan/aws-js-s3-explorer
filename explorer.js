@@ -932,7 +932,12 @@ function AddFolderController($scope, SharedService) {
         DEBUG.log('Calculated folder:', folder);
 
         const s3 = new AWS.S3(AWS.config);
-        const params = { Bucket: $scope.add_folder.bucket, Key: folder };
+        // we need to attach a '.empty' file as the request is attempting to create a directory,
+        // so that the new folder is able to be displayed.
+        const emptyFile = new File([''], '.empty', { type: 'text/plain' });
+        const params = {
+            Body: emptyFile, Bucket, Key: folder + ".empty", ContentType: emptyFile.type,
+        };
 
         DEBUG.log('Invoke headObject:', params);
 
