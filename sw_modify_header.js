@@ -42,21 +42,6 @@ self.addEventListener('fetch', (e) => {
         });
         e.respondWith(fetch(req));
     }
-    // If there is a PUT request where the url ends with '/', then we need to attach
-    // a '.empty' file as the request is attempting to create a directory.
-    else if (e.request.url.endsWith('/')) {
-        const emptyFile = new File([''], '.empty', { type: 'text/plain' });
-        const modifiedUrl = e.request.url + ".empty"
-        const req = new Request(modifiedUrl, {
-            headers,
-            body: emptyFile,
-            method: e.request.method,
-            mode: e.request.mode,
-            credentials: e.request.credentials,
-            redirect: e.request.redirect
-        });
-        e.respondWith(fetch(req));
-    }
     else {
         // At this point, the user is trying to upload a file as either a single-part upload or
         // a multi-part upload.
