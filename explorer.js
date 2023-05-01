@@ -953,7 +953,7 @@ function AddFolderController($scope, SharedService) {
                 s3.putObject(params, (err2, _data2) => {
                     if (err2) {
                         DEBUG.log('putObject error:', err2);
-                        bootbox.alert('Error creating folder:', err2);
+                        bootbox.alert('Error creating folder');
                     } else {
                         SharedService.addFolder(params.Bucket, params.Key);
                         $('#AddFolderModal').modal('hide');
@@ -961,9 +961,10 @@ function AddFolderController($scope, SharedService) {
                     }
                 });
             } else if (err1) {
-                bootbox.alert('Error checking existence of folder:', err1);
+                DEBUG.log('headObject error:', err1);
+                bootbox.alert('Error checking existence of folder');
             } else {
-                bootbox.alert('Error: folder or object already exists at', params.Key);
+                bootbox.alert('Error: folder or object already exists at: ' + params.Key);
             }
         });
     };
