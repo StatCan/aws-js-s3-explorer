@@ -935,14 +935,17 @@ function AddFolderController($scope, SharedService) {
         // we need to attach a '.empty' file as the request is attempting to create a directory,
         // so that the new folder is able to be displayed.
         const emptyFile = new File([''], '.empty', { type: 'text/plain' });
+        const headParams = {
+            Bucket: $scope.add_folder.bucket, Key: folder
+        };
         const params = {
             Body: emptyFile, Bucket: $scope.add_folder.bucket, Key: folder + ".empty", ContentType: emptyFile.type
         };
 
-        DEBUG.log('Invoke headObject:', params);
+        DEBUG.log('Invoke headObject:', headParams);
 
         // Test if an object with this key already exists
-        s3.headObject(params, (err1, _data1) => {
+        s3.headObject(headParams, (err1, _data1) => {
             if (err1 && err1.code === 'NotFound') {
                 DEBUG.log('Invoke putObject:', params);
 
