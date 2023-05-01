@@ -936,7 +936,7 @@ function AddFolderController($scope, SharedService) {
         // so that the new folder is able to be displayed.
         const emptyFile = new File([''], '.empty', { type: 'text/plain' });
         const params = {
-            Body: emptyFile, Bucket, Key: folder + ".empty", ContentType: emptyFile.type,
+            Body: emptyFile, Bucket: $scope.add_folder.bucket, Key: folder + ".empty", ContentType: emptyFile.type
         };
 
         DEBUG.log('Invoke headObject:', params);
