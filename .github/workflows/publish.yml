@@ -15,11 +15,14 @@ on:
     branches:
       - main
       - v2-alpha
+  schedule: 
+    - cron: '0 22 * * *'
 
 # Environment variables available to all jobs and steps in this workflow
 env:
   REGISTRY_NAME: k8scc01covidacr
   TRIVY_VERSION: "v0.43.1"
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -67,3 +70,10 @@ jobs:
         docker pull localhost:5000/profiles-controller:${{ github.sha }}
         docker tag localhost:5000/profiles-controller:${{ github.sha }} ${{ env.REGISTRY_NAME }}.azurecr.io/s3proxy:${{ github.sha }}
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/s3proxy:${{ github.sha }}
+
+    - name: Slack Notification
+      if: failure() && github.event_name=='schedule'
+      uses: act10ns/slack@v1
+      with: 
+        status: failure
+        message: aws-js-s3-explorer build failed. https://github.com/StatCan/aws-js-s3-explorer/actions/runs/${{github.run_id}}
