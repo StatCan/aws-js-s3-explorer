@@ -10,7 +10,7 @@ env:
   TRIVY_VERSION: "v0.43.1"
   # Vulnerabilities to Ignore, must be separated with \n
   # See https://github.com/StatCan/aaw-private/issues/121
-  IGNORE_VULNS: "CVE-2019-8457\nCVE-2022-1586\nCVE-2022-1587\nCVE-2021-46848\nCVE-2022-37434\n"
+  IGNORE_VULNS: CVE-2019-8457\nCVE-2022-1586\nCVE-2022-1587\nCVE-2021-46848\nCVE-2022-37434\n
 jobs:
   build:
     runs-on: ubuntu-latest
