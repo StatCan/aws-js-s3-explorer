@@ -28,12 +28,14 @@ jobs:
         docker build -f Dockerfile -t localhost:5000/s3proxy:${{ github.sha }} .
         docker push localhost:5000/s3proxy:${{ github.sha }}
         docker image prune
-
+    
+    #debug
+    - run: printf ${{ env.IGNORE_VULNS }} 
+    - run: printf ${{ env.IGNORE_VULNS }} > .trivyignore
+      
     # Scan image for vulnerabilities
     - name: Aqua Security Trivy image scan
       run: |
-        # Ignore Vulnerabilities
-        printf ${{ env.IGNORE_VULNS }} > .trivyignore
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
 
