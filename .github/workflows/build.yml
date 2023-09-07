@@ -27,7 +27,7 @@ jobs:
         echo "TRIVY IGNORE"
         printf ${{ env.IGNORE_VULNS }} > .trivyignore
         cat .trivyignore
-        echo "blargh
+        echo "blargh"
         echo -e ${{ env.IGNORE_VULNS }} > .blah  
         cat .blah 
     
