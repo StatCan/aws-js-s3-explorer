@@ -22,32 +22,19 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: DEBUGG
-      run : | 
-        echo "TRIVY IGNORE"
-        printf ${{ env.IGNORE_VULNS }} > .trivyignore
-        cat .trivyignore
-        echo "blargh"
-        echo -e ${{ env.IGNORE_VULNS }} > .blah  
-        cat .blah 
-    
-    - run: | 
-        exit 1
-
     # Container build
     - name: Build image
       run: |
         docker build -f Dockerfile -t localhost:5000/s3proxy:${{ github.sha }} .
         docker push localhost:5000/s3proxy:${{ github.sha }}
         docker image prune
-    
-    - run: printf ${{ env.IGNORE_VULNS }} > .trivyignore
       
     # Scan image for vulnerabilities
     - name: Aqua Security Trivy image scan
       run: |
+
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
-        cat .trivyignore
+        printf ${{ env.IGNORE_VULNS }} > .trivyignore
         trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
 
     # Run Dockle
