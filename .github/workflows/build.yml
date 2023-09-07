@@ -8,9 +8,9 @@ on:
 # Environment variables available to all jobs and steps in this workflow
 env:
   TRIVY_VERSION: "v0.43.1"
-  # Vulnerabilities to Ignore, must be separated with \n
+  # Vulnerabilities to Ignore, must be separated with \\n
   # See https://github.com/StatCan/aaw-private/issues/121
-  IGNORE_VULNS: "CVE-2019-8457\nCVE-2022-1586\nCVE-2022-1587\nCVE-2021-46848\nCVE-2022-37434\n"
+  IGNORE_VULNS: 'CVE-2019-8457\\nCVE-2022-1586\\nCVE-2022-1587\\nCVE-2021-46848\\nCVE-2022-37434\\n'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,12 +24,19 @@ jobs:
 
     - name: DEBUGG
       run : | 
-        #printf ${{ env.IGNORE_VULNS }} > .trivyignore
-        #cat .trivyignore
+        annoying=${{ env.IGNORE_VULNS }}
+        printf $annoying
+        echo "-1---------------------------------"
+        echo -e $annoying
+        echo "-2---------------------------------"
+        printf ${{ env.IGNORE_VULNS }}
+        echo "-3---------------------------------"
         echo -e ${{ env.IGNORE_VULNS }} > .blah
+        echo "-4---------------------------------"
         cat .blah 
-        exit 0
-
+    
+    - run: | 
+        exit 1
 
     # Container build
     - name: Build image
@@ -43,7 +50,6 @@ jobs:
     # Scan image for vulnerabilities
     - name: Aqua Security Trivy image scan
       run: |
-        cat .trivyignore
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         cat .trivyignore
         trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
