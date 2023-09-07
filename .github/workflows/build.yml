@@ -24,15 +24,11 @@ jobs:
 
     - name: DEBUGG
       run : | 
-        annoying=${{ env.IGNORE_VULNS }}
-        printf $annoying
-        echo "-1---------------------------------"
-        echo -e $annoying
-        echo "-2---------------------------------"
-        printf ${{ env.IGNORE_VULNS }}
-        echo "-3---------------------------------"
-        echo -e ${{ env.IGNORE_VULNS }} > .blah
-        echo "-4---------------------------------"
+        echo "TRIVY IGNORE"
+        printf ${{ env.IGNORE_VULNS }} > .trivyignore
+        cat .trivyignore
+        echo "blargh
+        echo -e ${{ env.IGNORE_VULNS }} > .blah  
         cat .blah 
     
     - run: | 
