@@ -10,7 +10,7 @@ env:
   TRIVY_VERSION: "v0.43.1"
   # Vulnerabilities to Ignore, must be separated with \n
   # See https://github.com/StatCan/aaw-private/issues/121
-  IGNORE_VULNS: CVE-2019-8457\nCVE-2022-1586\nCVE-2022-1587\nCVE-2021-46848\nCVE-2022-37434\n
+  IGNORE_VULNS: "CVE-2019-8457\nCVE-2022-1586\nCVE-2022-1587\nCVE-2021-46848\nCVE-2022-37434\n"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,6 +22,15 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    - name: DEBUGG
+      run : | 
+        #printf ${{ env.IGNORE_VULNS }} > .trivyignore
+        #cat .trivyignore
+        echo -e ${{ env.IGNORE_VULNS }} > .blah
+        cat .blah 
+        exit 0
+
+
     # Container build
     - name: Build image
       run: |
@@ -29,14 +38,14 @@ jobs:
         docker push localhost:5000/s3proxy:${{ github.sha }}
         docker image prune
     
-    #debug
-    - run: printf ${{ env.IGNORE_VULNS }} 
     - run: printf ${{ env.IGNORE_VULNS }} > .trivyignore
       
     # Scan image for vulnerabilities
     - name: Aqua Security Trivy image scan
       run: |
+        cat .trivyignore
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+        cat .trivyignore
         trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
 
     # Run Dockle
