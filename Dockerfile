@@ -15,7 +15,11 @@ COPY explorer.css /etc/static/explorer.css
 COPY explorer.js /etc/static/explorer.js
 COPY sw_modify_header.js /etc/static/sw_modify_header.js
 
-
+# Address Vulnerabilities
+RUN apt-get update \
+  && apt-get --only-upgrade install libpcre2-8-0 \
+  && apt-get --only-upgrade install libtasn1-6 \
+  && apt-get --only-upgrade install zlib1g
 # Create non-root user
 ARG USER=jovyan
 ARG APP_HOME=/home/jovyan/buckets

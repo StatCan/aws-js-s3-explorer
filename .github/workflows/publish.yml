@@ -25,7 +25,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   # Vulnerabilities to Ignore, must be separated with \n
   # See https://github.com/StatCan/aaw-private/issues/121
-  IGNORE_VULNS: 'CVE-2019-8457\\nCVE-2022-1586\\nCVE-2022-1587\\nCVE-2021-46848\\nCVE-2022-37434\\n'
+  IGNORE_VULNS: 'CVE-2019-8457'
 jobs:
   build:
     runs-on: ubuntu-latest
