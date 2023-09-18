@@ -1,0 +1,50 @@
+name: PR_build
+on:
+  pull_request:
+    types:
+      - 'opened'
+      - 'synchronize'
+      - 'reopened'
+  schedule: 
+    - cron: '0 22 * * *'
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  TRIVY_VERSION: "v0.43.1"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+    - uses: actions/checkout@master
+
+    # Container build
+    - name: Build image
+      run: |
+        docker build -f Dockerfile -t localhost:5000/s3proxy:${{ github.sha }} .
+        docker push localhost:5000/s3proxy:${{ github.sha }}
+        docker image prune
+      
+    # Scan image for vulnerabilities
+    - name: Aqua Security Trivy image scan
+      run: |
+        # Ignore Vulnerabilities
+        # These are controlled via the github secret "CVE_ALLOWLIST"
+        # See https://github.com/StatCan/aaw-private/issues/121 for more details as editing the allowlist may be annoying
+        printf ${{ secrets.CVE_ALLOWLIST }} > .trivyignore
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+        trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+
+    # Run Dockle
+    - name: Run dockle
+      uses: goodwithtech/dockle-action@main
+      with:
+        image: localhost:5000/s3proxy:${{ github.sha }}
+        format: 'list'
+        exit-code: '0'
+        exit-level: 'fatal'
+        ignore: 'DKL-DI-0006'
