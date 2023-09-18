@@ -21,9 +21,6 @@ env:
   REGISTRY_NAME: k8scc01covidacr
   TRIVY_VERSION: "v0.43.1"
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  # Vulnerabilities to Ignore, must be separated with \n
-  # See https://github.com/StatCan/aaw-private/issues/121
-  IGNORE_VULNS: 'CVE-2019-8457'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -53,7 +50,9 @@ jobs:
     - name: Aqua Security Trivy image scan
       run: |
         # Ignore Vulnerabilities
-        printf ${{ env.IGNORE_VULNS }} > .trivyignore
+        # These are controlled via the github secret "CVE_ALLOWLIST"
+        # See https://github.com/StatCan/aaw-private/issues/121 for more details as editing the allowlist may be annoying
+        printf ${{ secrets.CVE_ALLOWLIST }} > .trivyignore
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         trivy image localhost:5000/s3proxy:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
 
